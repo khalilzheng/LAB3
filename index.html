@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lab 3 - Farnell Synthesis Final</title>
+  <style>
+    :root {
+      --line: #232a42;
+      --text: #eef2ff;
+      --muted: #a2acc9;
+      --green: #78ff64;
+      --blue: #4ec6ff;
+      --orange: #ff8a4e;
+      --pink: #ff66c4;
+      --yellow: #ffd84d;
+      --shadow: 0 20px 60px rgba(0,0,0,0.35);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(78,198,255,0.10), transparent 22%),
+        radial-gradient(circle at top right, rgba(120,255,100,0.10), transparent 25%),
+        linear-gradient(180deg, #05070c 0%, #090c14 100%);
+    }
+
+    .shell {
+      width: min(1380px, calc(100vw - 36px));
+      margin: 18px auto 40px auto;
+    }
+
+    .hero {
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(19,26,43,0.97), rgba(10,14,24,0.99));
+      box-shadow: var(--shadow);
+    }
+
+    .heroTop {
+      padding: 28px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(34px, 5vw, 72px);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+    }
+
+    .accent { color: var(--green); }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.65;
+      margin-top: 16px;
+      max-width: 980px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      padding: 18px 28px 22px 28px;
+      flex-wrap: wrap;
+      background: rgba(5,8,14,0.35);
+    }
+
+    .tabButton {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px 18px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .tabButton.active {
+      color: #07100a;
+      background: var(--green);
+      border-color: var(--green);
+      box-shadow: 0 0 28px rgba(120,255,100,0.25);
+    }
+
+    .tabPane { display: none; padding: 28px; }
+    .tabPane.active { display: block; }
+
+    .stack { display: grid; gap: 22px; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(17,22,37,0.98), rgba(10,13,22,0.98));
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h2, .card h3 {
+      margin-top: 0;
+      letter-spacing: -0.03em;
+    }
+
+    .card p, .card li {
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 16px;
+    }
+
+    .buttonRow {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+      align-items: center;
+    }
+
+    .primaryButton, .secondaryButton {
+      border: none;
+      border-radius: 16px;
+      padding: 14px 20px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    .primaryButton { background: var(--green); color: #061208; }
+    .secondaryButton { background: #5d2d22; color: #ffc7b1; }
+    .primaryButton:hover, .secondaryButton:hover, .tabButton:hover { transform: translateY(-1px); }
+
+    .statusDot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #727a96;
+      margin-right: 8px;
+    }
+
+    .statusDot.live {
+      background: var(--green);
+      box-shadow: 0 0 16px rgba(120,255,100,0.5);
+    }
+
+    .sliderGrid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .sliderWrap {
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .sliderWrap label {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--green);
+    }
+
+    .graphBox {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 18px;
+      overflow: auto;
+      background: linear-gradient(180deg, rgba(7,9,15,1), rgba(11,15,24,1));
+    }
+
+    .graphBox svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .signalTitle {
+      color: var(--blue);
+      font-size: 34px;
+      letter-spacing: -0.04em;
+      margin-bottom: 12px;
+    }
+
+    .miniTitle {
+      margin: 0 0 10px 0;
+      color: var(--yellow);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-size: 12px;
+    }
+
+    .pillRow {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: var(--muted);
+      font-size: 13px;
+      background: rgba(255,255,255,0.02);
+    }
+
+    pre {
+      margin: 0;
+      background: #06080f;
+      border: 1px solid #1a2138;
+      color: #cfd7f5;
+      border-radius: 20px;
+      padding: 18px;
+      overflow: auto;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    code {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    }
+
+    .noteStrong {
+      color: #ffd7c6;
+      font-weight: 700;
+    }
+
+    @media (max-width: 1050px) {
+      .grid, .sliderGrid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="hero">
+      <div class="heroTop">
+  
+        <h1>Lab 3 - <span class="accent">Farnell</span> Synthesis</h1>
+        <div class="subtitle">
+         
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tabButton active" data-tab="part1Pane">Part I - Babbling Brook</button>
+        <button class="tabButton" data-tab="part2Pane">Part II - Wind</button>
+        <button class="tabButton" data-tab="writeupPane">Writeup</button>
+      </div>
+
+      <div id="part1Pane" class="tabPane active">
+        <div class="stack">
+          <div class="card">
+            <div class="miniTitle">Part I Reading unfamiliar languages</div>
+            <h2>Babbling Brook</h2>
+            <p>
+              I looked back at the professor's code more carefully. What really matters in the brook sound is not just a sharper filter, but the interaction between the noisy audio path and the slowly moving control signal that changes the resonant high-pass cutoff. In my WebAudio version, I kept that basic structure and then made the sound denser by layering a few related streams so it felt closer to babbling brook.
+
+            <div class="buttonRow">
+              <button class="primaryButton" onclick="startBrook()">▶ Start Brook</button>
+              <button class="secondaryButton" onclick="stopBrook()">■ Stop Brook</button>
+              <div style="display:flex;align-items:center;color:var(--muted);font-weight:700;">
+                <span id="brookStatusDot" class="statusDot"></span>
+                <span id="brookStatusText">idle</span>
+              </div>
+            </div>
+
+            <div class="sliderGrid">
+              <div class="sliderWrap">
+                <label><span>Master level</span><span id="brookMasterValue">1.05</span></label>
+                <input id="brookMasterSlider" type="range" min="0.20" max="2.50" step="0.01" value="1.05" oninput="updateBrookParameters()" />
+              </div>
+              <div class="sliderWrap">
+                <label><span>Layer 2 boost</span><span id="brookLayer2Value">5.50</span></label>
+                <input id="brookLayer2Slider" type="range" min="1.00" max="12.00" step="0.10" value="5.50" oninput="updateBrookParameters()" />
+              </div>
+              <div class="sliderWrap">
+                <label><span>Brook brightness</span><span id="brookBrightValue">420.00</span></label>
+                <input id="brookBrightSlider" type="range" min="250" max="800" step="10" value="420" oninput="updateBrookParameters()" />
+              </div>
+              <div class="sliderWrap">
+                <label><span>Bubble sharpness</span><span id="brookRQValue">33.30</span></label>
+                <input id="brookRQSlider" type="range" min="18" max="50" step="0.10" value="33.30" oninput="updateBrookParameters()" />
+              </div>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div class="card">
+              <div class="pillRow">
+
+              </div>
+              <div class="signalTitle">Signal Flow Graph</div>
+              <div class="graphBox">
+                <svg viewBox="0 0 1320 860" aria-label="Part I brook graph">
+                  <defs>
+                    <marker id="bSimpleA" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                      <path d="M0,0 L0,6 L9,3 z" fill="#4ec6ff"></path>
+                    </marker>
+                    <marker id="bSimpleB" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                      <path d="M0,0 L0,6 L9,3 z" fill="#78ff64"></path>
+                    </marker>
+                    <marker id="bSimpleC" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                      <path d="M0,0 L0,6 L9,3 z" fill="#ff8a4e"></path>
+                    </marker>
+                  </defs>
+
+                  <text x="50" y="45" fill="#4ec6ff" font-size="48" font-weight="700">Part I · Babbling Brook</text>
+                  <text x="50" y="82" fill="#9aa7cc" font-size="22">simple signal flow version with cleaner one-by-one links. </text>
+                  <text x="50" y="108" fill="#9aa7cc" font-size="16">This diagram is simplified for readability. Both brook layers still use brown-noise audio and slow cutoff modulation.</text>
+
+                  <rect x="130" y="130" width="320" height="88" rx="18" fill="rgba(78,198,255,0.08)" stroke="#4ec6ff" stroke-width="2"/>
+                  <text x="290" y="168" text-anchor="middle" fill="#4ec6ff" font-size="30" font-weight="700">Brown Noise Audio</text>
+                  <text x="290" y="198" text-anchor="middle" fill="#8bbddd" font-size="18">audio source copies</text>
+
+                  <rect x="860" y="130" width="320" height="88" rx="18" fill="rgba(120,255,100,0.08)" stroke="#78ff64" stroke-width="2"/>
+                  <text x="1020" y="168" text-anchor="middle" fill="#78ff64" font-size="30" font-weight="700">Brown Noise Control</text>
+                  <text x="1020" y="198" text-anchor="middle" fill="#a6c98e" font-size="18">slow cutoff movement</text>
+
+                  <rect x="90" y="320" width="240" height="96" rx="18" fill="rgba(78,198,255,0.08)" stroke="#4ec6ff" stroke-width="2"/>
+                  <text x="210" y="358" text-anchor="middle" fill="#4ec6ff" font-size="28" font-weight="700">LPF Audio A</text>
+                  <text x="210" y="386" text-anchor="middle" fill="#8bbddd" font-size="16">LPF(BrownNoise, 400)</text>
+
+                  <rect x="390" y="320" width="240" height="96" rx="18" fill="rgba(255,138,78,0.08)" stroke="#ff8a4e" stroke-width="2"/>
+                  <text x="510" y="358" text-anchor="middle" fill="#ff8a4e" font-size="28" font-weight="700">Sharp RHPF A</text>
+                  <text x="510" y="386" text-anchor="middle" fill="#e4b093" font-size="16">slow mod × scale + 500</text>
+
+                  <rect x="690" y="320" width="240" height="96" rx="18" fill="rgba(255,102,196,0.08)" stroke="#ff66c4" stroke-width="2"/>
+                  <text x="810" y="358" text-anchor="middle" fill="#ff66c4" font-size="28" font-weight="700">Sharp RHPF B</text>
+                  <text x="810" y="386" text-anchor="middle" fill="#f3a7d8" font-size="16">slow mod × scale + 1000</text>
+
+                  <rect x="990" y="320" width="240" height="96" rx="18" fill="rgba(120,255,100,0.08)" stroke="#78ff64" stroke-width="2"/>
+                  <text x="1110" y="358" text-anchor="middle" fill="#78ff64" font-size="28" font-weight="700">LPF Control</text>
+                  <text x="1110" y="386" text-anchor="middle" fill="#a6c98e" font-size="16">LPF(BrownNoise, 14 / 20)</text>
+
+                  <rect x="320" y="540" width="300" height="104" rx="18" fill="rgba(255,138,78,0.08)" stroke="#ff8a4e" stroke-width="2"/>
+                  <text x="470" y="580" text-anchor="middle" fill="#ff8a4e" font-size="32" font-weight="700">Dense Layer Sum</text>
+                  <text x="470" y="610" text-anchor="middle" fill="#e4b093" font-size="17">lower layer + brighter layer</text>
+
+                  <rect x="740" y="540" width="320" height="104" rx="18" fill="rgba(120,255,100,0.08)" stroke="#78ff64" stroke-width="2"/>
+                  <text x="900" y="580" text-anchor="middle" fill="#78ff64" font-size="32" font-weight="700">Master + Compressor</text>
+                  <text x="900" y="610" text-anchor="middle" fill="#a6c98e" font-size="17">makeup gain → destination</text>
+
+                  <rect x="820" y="730" width="160" height="70" rx="18" fill="rgba(255,255,255,0.03)" stroke="#9099b7" stroke-width="2"/>
+                  <text x="900" y="773" text-anchor="middle" fill="#ecf1ff" font-size="26" font-weight="700">Destination</text>
+
+                  <line x1="290" y1="218" x2="210" y2="320" stroke="#4ec6ff" stroke-width="3" marker-end="url(#bSimpleA)"/>
+                  <line x1="290" y1="218" x2="810" y2="320" stroke="#4ec6ff" stroke-width="3" marker-end="url(#bSimpleC)"/>
+                  <line x1="210" y1="416" x2="510" y2="320" stroke="#4ec6ff" stroke-width="3" marker-end="url(#bSimpleC)"/>
+                  <line x1="1020" y1="218" x2="1110" y2="320" stroke="#78ff64" stroke-width="3" marker-end="url(#bSimpleB)"/>
+                  <line x1="990" y1="368" x2="630" y2="368" stroke="#78ff64" stroke-width="3" marker-end="url(#bSimpleB)"/>
+                  <line x1="990" y1="368" x2="930" y2="368" stroke="#78ff64" stroke-width="3" marker-end="url(#bSimpleB)"/>
+                  <line x1="510" y1="416" x2="430" y2="540" stroke="#ff8a4e" stroke-width="3" marker-end="url(#bSimpleC)"/>
+                  <line x1="810" y1="416" x2="510" y2="540" stroke="#ff66c4" stroke-width="3" marker-end="url(#bSimpleC)"/>
+                  <line x1="620" y1="592" x2="740" y2="592" stroke="#8a92b8" stroke-width="3" marker-end="url(#bSimpleB)"/>
+                  <line x1="900" y1="644" x2="900" y2="730" stroke="#8a92b8" stroke-width="3" marker-end="url(#bSimpleB)"/>
+                </svg>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="miniTitle">WebAudio implementation</div>
+              <pre><code id="part1CodeBlock"></code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="part2Pane" class="tabPane">
+        <div class="stack">
+          <div class="card">
+            <div class="miniTitle">Part II Reading high level descriptions Farnell Practical 18</div>
+            <h2>Wind Scene</h2>
+            <p>
+              For Part II I built the wind scene as layers instead of pretending wind is one single sound.
+              Everything is tied to one shared wind-speed control, then different noise layers react to that control in different ways.
+            </p>
+            <p>
+              <span class="noteStrong">Extra step:</span> this version keeps the separate <strong>metal rattle / structure creak</strong> layer.
+              It only appears during stronger gusts and uses resonant peaks plus burst shaping, so it reads as a harder environmental detail on top of the main wind patch.
+            </p>
+
+            <div class="buttonRow">
+              <button class="primaryButton" onclick="startWindScene()">▶ Start Wind</button>
+              <button class="secondaryButton" onclick="stopWindScene()">■ Stop Wind</button>
+              <div style="display:flex;align-items:center;color:var(--muted);font-weight:700;">
+                <span id="windStatusDot" class="statusDot"></span>
+                <span id="windStatusText">idle</span>
+              </div>
+            </div>
+
+            <div class="sliderGrid">
+              <div class="sliderWrap">
+                <label><span>Master level</span><span id="windMasterValue">0.20</span></label>
+                <input id="windMasterSlider" type="range" min="0.04" max="0.45" step="0.01" value="0.20" oninput="updateWindParameters()" />
+              </div>
+              <div class="sliderWrap">
+                <label><span>Base LFO speed</span><span id="windLfoValue">0.10</span></label>
+                <input id="windLfoSlider" type="range" min="0.03" max="0.30" step="0.01" value="0.10" oninput="updateWindParameters()" />
+              </div>
+              <div class="sliderWrap">
+                <label><span>Static noise level</span><span id="windStaticValue">0.16</span></label>
+                <input id="windStaticSlider" type="range" min="0.03" max="0.40" step="0.01" value="0.16" oninput="updateWindParameters()" />
+              </div>
+              <div class="sliderWrap">
+                <label><span>Whistle sharpness</span><span id="windWhistleQValue">35.00</span></label>
+                <input id="windWhistleQSlider" type="range" min="10" max="60" step="1" value="35" oninput="updateWindParameters()" />
+              </div>
+              <div class="sliderWrap">
+                <label><span>Howl wobble</span><span id="windHowlWobbleValue">0.35</span></label>
+                <input id="windHowlWobbleSlider" type="range" min="0.08" max="1.20" step="0.01" value="0.35" oninput="updateWindParameters()" />
+              </div>
+              <div class="sliderWrap">
+                <label><span>Metal rattle extra</span><span id="windMetalValue">0.06</span></label>
+                <input id="windMetalSlider" type="range" min="0.00" max="0.20" step="0.01" value="0.06" oninput="updateWindParameters()" />
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="pillRow">
+
+            </div>
+            <div class="signalTitle">Signal Flow Graph</div>
+            <div class="graphBox">
+              <svg viewBox="0 0 1320 860" aria-label="Part II signal flow graph">
+                <defs>
+                  <marker id="wSimple" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                    <path d="M0,0 L0,6 L9,3 z" fill="#9aa4c5"></path>
+                  </marker>
+                </defs>
+
+                <text x="50" y="45" fill="#4ec6ff" font-size="48" font-weight="700">Part II · Wind Scene</text>
+                <text x="50" y="82" fill="#9aa7cc" font-size="22">simple one-by-one signal flow layout</text>
+
+                <rect x="140" y="130" width="360" height="88" rx="18" fill="rgba(120,255,100,0.08)" stroke="#78ff64" stroke-width="2"/>
+                <text x="320" y="168" text-anchor="middle" fill="#78ff64" font-size="34" font-weight="700">Wind Speed Control</text>
+                <text x="320" y="198" text-anchor="middle" fill="#a6c98e" font-size="18">base LFO + gust + squall + lag</text>
+
+                <text x="320" y="235" text-anchor="middle" fill="#a6c98e" font-size="16">shared control for all six main wind layers</text>
+
+                <rect x="820" y="130" width="360" height="88" rx="18" fill="rgba(78,198,255,0.08)" stroke="#4ec6ff" stroke-width="2"/>
+                <text x="1000" y="168" text-anchor="middle" fill="#4ec6ff" font-size="34" font-weight="700">Shared White Noise Buffer</text>
+                <text x="1000" y="198" text-anchor="middle" fill="#8bbddd" font-size="18">raw material reused by each layer</text>
+                <text x="1000" y="235" text-anchor="middle" fill="#8bbddd" font-size="16">shared raw source for all six main wind layers</text>
+
+                <rect x="70" y="320" width="170" height="96" rx="18" fill="rgba(78,198,255,0.08)" stroke="#4ec6ff" stroke-width="2"/>
+                <text x="155" y="358" text-anchor="middle" fill="#4ec6ff" font-size="28" font-weight="700">Static Noise</text>
+                <text x="155" y="385" text-anchor="middle" fill="#8bbddd" font-size="15">BPF around 800 Hz</text>
+                <text x="155" y="405" text-anchor="middle" fill="#8bbddd" font-size="15">gain follows wind</text>
+
+                <rect x="275" y="320" width="170" height="96" rx="18" fill="rgba(120,255,100,0.08)" stroke="#78ff64" stroke-width="2"/>
+                <text x="360" y="358" text-anchor="middle" fill="#78ff64" font-size="28" font-weight="700">Swept Noise</text>
+                <text x="360" y="385" text-anchor="middle" fill="#a6c98e" font-size="15">center moves up</text>
+                <text x="360" y="405" text-anchor="middle" fill="#a6c98e" font-size="15">with wind speed</text>
+
+                <rect x="480" y="320" width="170" height="96" rx="18" fill="rgba(255,138,78,0.08)" stroke="#ff8a4e" stroke-width="2"/>
+                <text x="565" y="358" text-anchor="middle" fill="#ff8a4e" font-size="28" font-weight="700">Whistle A</text>
+                <text x="565" y="385" text-anchor="middle" fill="#e4b093" font-size="15">narrow BPF</text>
+                <text x="565" y="405" text-anchor="middle" fill="#e4b093" font-size="15">threshold gated</text>
+
+                <rect x="685" y="320" width="170" height="96" rx="18" fill="rgba(255,102,196,0.08)" stroke="#ff66c4" stroke-width="2"/>
+                <text x="770" y="358" text-anchor="middle" fill="#ff66c4" font-size="28" font-weight="700">Howl A</text>
+                <text x="770" y="385" text-anchor="middle" fill="#f3a7d8" font-size="15">filtered noise + wobble</text>
+                <text x="770" y="405" text-anchor="middle" fill="#f3a7d8" font-size="15">stronger wind only</text>
+
+                <rect x="890" y="320" width="170" height="96" rx="18" fill="rgba(255,138,78,0.08)" stroke="#ff8a4e" stroke-width="2"/>
+                <text x="975" y="358" text-anchor="middle" fill="#ff8a4e" font-size="28" font-weight="700">Whistle B</text>
+                <text x="975" y="385" text-anchor="middle" fill="#e4b093" font-size="15">higher narrow BPF</text>
+                <text x="975" y="405" text-anchor="middle" fill="#e4b093" font-size="15">harder threshold</text>
+
+                <rect x="1095" y="320" width="170" height="96" rx="18" fill="rgba(255,102,196,0.08)" stroke="#ff66c4" stroke-width="2"/>
+                <text x="1180" y="358" text-anchor="middle" fill="#ff66c4" font-size="28" font-weight="700">Howl B</text>
+                <text x="1180" y="385" text-anchor="middle" fill="#f3a7d8" font-size="15">different center freq</text>
+                <text x="1180" y="405" text-anchor="middle" fill="#f3a7d8" font-size="15">slower wobble</text>
+
+                <rect x="470" y="500" width="380" height="110" rx="18" fill="rgba(255,216,77,0.08)" stroke="#ffd84d" stroke-width="2"/>
+                <text x="660" y="538" text-anchor="middle" fill="#ffd84d" font-size="32" font-weight="700">Metal Rattle / Creak</text>
+                <text x="660" y="568" text-anchor="middle" fill="#fff0aa" font-size="17">extra step</text>
+                <text x="660" y="592" text-anchor="middle" fill="#fff0aa" font-size="17">gust-triggered bursts + resonant peaks</text>
+
+                <rect x="500" y="680" width="320" height="92" rx="18" fill="rgba(255,255,255,0.03)" stroke="#9099b7" stroke-width="2"/>
+                <text x="660" y="718" text-anchor="middle" fill="#ecf1ff" font-size="34" font-weight="700">Master GainNode</text>
+                <text x="660" y="747" text-anchor="middle" fill="#aab3cd" font-size="18">all layers summed here</text>
+
+                <rect x="470" y="800" width="380" height="70" rx="18" fill="rgba(255,255,255,0.03)" stroke="#9099b7" stroke-width="2"/>
+                <text x="660" y="843" text-anchor="middle" fill="#ecf1ff" font-size="32" font-weight="700">AudioContext.destination</text>
+
+                <line x1="320" y1="218" x2="320" y2="270" stroke="#657095" stroke-width="3" marker-end="url(#wSimple)"/>
+                <line x1="1000" y1="218" x2="1000" y2="270" stroke="#657095" stroke-width="3" marker-end="url(#wSimple)"/>
+
+                <line x1="155" y1="416" x2="540" y2="680" stroke="#7b84aa" stroke-width="3" marker-end="url(#wSimple)"/>
+                <line x1="360" y1="416" x2="575" y2="680" stroke="#7b84aa" stroke-width="3" marker-end="url(#wSimple)"/>
+                <line x1="565" y1="416" x2="610" y2="680" stroke="#7b84aa" stroke-width="3" marker-end="url(#wSimple)"/>
+                <line x1="770" y1="416" x2="710" y2="680" stroke="#7b84aa" stroke-width="3" marker-end="url(#wSimple)"/>
+                <line x1="975" y1="416" x2="745" y2="680" stroke="#7b84aa" stroke-width="3" marker-end="url(#wSimple)"/>
+                <line x1="1180" y1="416" x2="780" y2="680" stroke="#7b84aa" stroke-width="3" marker-end="url(#wSimple)"/>
+                <line x1="660" y1="610" x2="660" y2="680" stroke="#7b84aa" stroke-width="3" marker-end="url(#wSimple)"/>
+                <line x1="660" y1="772" x2="660" y2="800" stroke="#9099b7" stroke-width="3" marker-end="url(#wSimple)"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<div id="writeupPane" class="tabPane">
+  <div class="stack">
+    <div class="card">
+      <div class="miniTitle">Writeup</div>
+      <h2>Part I - Babbling Brook</h2>
+      <p>
+        For Part I, I first worked with a classmate during class. Later on, I had to miss some time for a medical reason, and by the time I came back everyone had already settled into teams, so I finished the later development and refinement on my own.
+      </p>
+      <p>
+        My goal for Part I was to stay close to the professor’s SuperCollider brook example instead of just making some random water sound. What helped me most was realizing that the brook sound is not coming from one filter by itself. It comes from the interaction between a noisy audio path and a much slower control path that keeps shifting the resonant high-pass cutoff over time.
+      </p>
+      <p>
+        In my WebAudio version, I kept that same core idea. Brown noise is used as the raw sound source, then it goes through a low-pass stage and into a resonant high-pass filter. At the same time, another filtered brown-noise signal acts as a slow control signal and modulates the cutoff frequency. One important part of the translation was that in WebAudio I had to build this structure explicitly with separate nodes, instead of writing the whole signal chain in one compact SuperCollider expression.
+      </p>
+      <p>
+        After I got the basic translation working, the first version still felt too thin and too static. It sounded closer to filtered noise than to moving water. So I kept the same basic structure but made the sound denser by layering several related brook streams together. In my final patch, there are four main brook streams, plus extra bubble and gurgle detail layers. Some of those layers sit lower and some are brighter, with slightly different balances and cutoff regions. That helped the result feel fuller and more active, because the brook sound is really made of many small noisy events moving at once rather than one stable tone.
+      </p>
+      <p>
+        The key parts of my code in Part I are the separate audio path and control path inside each brook stream, the resonant high-pass filter, and the way several layers are summed together. In each stream, the audio Brown Noise goes through a low-pass filter and then into the resonant high-pass filter, while a second Brown Noise signal is low-passed much more heavily and used to modulate the cutoff. After that, I combine four main brook streams and then add the extra bubble and gurgle layers to make the result denser and more active.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>Part II - Wind Synthesis (Farnell Practical 18)</h2>
+      <p>
+        For Part II, I chose the wind idea from Farnell Practical 18. What I liked about this chapter is that it treats wind as a whole scene instead of one single sound. Wind itself is not really one tone. What we hear is air interacting with wires, openings, surfaces, and structures, so I built the patch as several layers that all belong to the same environment.
+      </p>
+      <p>
+        The center of my patch is one shared wind-speed control. In the code, that control is built from a slow base motion plus gusts and smaller squalls, and then smoothed so the overall movement feels more natural. I used that same control to drive six main layers: a static noise bed, a swept noise layer, two whistle layers, and two howl layers. Using one shared control was important because it keeps all the layers rising and falling together, so the patch feels like one place and one weather condition instead of separate sound effects stacked together.
+      </p>
+      <p>
+        Each layer has a different job. The static noise layer gives the patch a steady air bed. The swept noise layer adds more motion and brightness as the wind gets stronger. The whistle layers are narrower and sharper, so they suggest air passing through tighter edges or smaller openings. The howl layers are lower and more unstable, which helps create the hollow and resonant part of the wind sound. Because they all respond to the same wind-speed control, they stay connected even though they do different things.
+      </p>
+      <p>
+        For the extra step, I added a separate metal rattle / structure creak layer that only appears in stronger gusts. That layer uses burst-like shaping and resonant peaks, so it does not sound like just another copy of the main wind texture. I wanted one harder structural detail in the scene so the patch would feel more specific, like the wind is hitting an actual object in the environment.
+      </p>
+      <p>
+        The key parts of my code in Part II are the shared wind-speed control, the six main wind layers, and the extra metal rattle / creak layer. I first build one control signal from a slow base LFO, gust movement, and squall movement, and then I use that same signal to drive the different layers in different ways. The static layer mainly provides a constant air bed, the swept layer adds motion and brightness, the whistle layers use narrow filtering and threshold behavior, and the howl layers use lower resonances with extra wobble. On top of that, the metal layer adds a harder burst-like structural detail during stronger gusts.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>Types of Synthesis Used</h2>
+      <p>
+        In Part I, the main synthesis ideas are brown-noise-based sound generation, subtractive filtering, slow modulation, layering, and mixing related noisy streams. Brown noise provides the raw material, the filters shape the texture, and the slow cutoff modulation keeps the sound moving instead of static. I chose this approach because the brook sound is more about texture and small shifting events than about one stable pitch.
+      </p>
+      <p>
+        In Part II, the patch uses noise-based synthesis, subtractive filtering, modulation, threshold shaping, layering, and burst-based detail design. Filtered noise forms the base of the wind scene, shared control makes the layers rise and fall together, threshold shaping helps some layers appear only at stronger wind speeds, and the burst-based metal layer adds a harder structural detail on top. I chose these methods because wind is naturally broadband and messy, so filtered noise is a strong foundation, while modulation and layering make it feel alive and environmental instead of flat.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>Process &amp; Experience</h2>
+      <p>
+        The hardest part of this lab was thinking in terms of signal flow instead of just reading code from top to bottom. In SuperCollider, the structure is compact and a lot of the signal relationships are packed into one line. In WebAudio, I had to build every node and every connection myself, which made me think much more carefully about what is acting as sound and what is acting as control.
+      </p>
+      <p>
+        For Part I, the biggest challenge was getting the brook to feel like water instead of just filtered noise. Small changes in density, resonance, and balance made a big difference. For Part II, the challenge was making multiple layers work together without making the patch feel crowded or disconnected. The shared wind-speed control ended up being the most useful design decision, because it gave all the layers one common motion.
+      </p>
+      <p>
+        What I liked most about this assignment is that both sounds start from simple materials, especially noise, but the final result depends on how those materials are filtered, modulated, layered, and balanced. That made the lab feel much more open-ended and creative than just building a basic synth patch.
+      </p>
+    </div>
+  </div>
+</div>
+
+  <script>
+    const allTabButtons = document.querySelectorAll('.tabButton');
+    const allTabPanes = document.querySelectorAll('.tabPane');
+    allTabButtons.forEach(function(button) {
+      button.addEventListener('click', function() {
+        const targetTabId = button.getAttribute('data-tab');
+        allTabButtons.forEach(btn => btn.classList.remove('active'));
+        allTabPanes.forEach(pane => pane.classList.remove('active'));
+        button.classList.add('active');
+        document.getElementById(targetTabId).classList.add('active');
+      });
+    });
+
+    function createWhiteNoiseBuffer(audioCtx, seconds) {
+      const bufferSize = Math.floor(seconds * audioCtx.sampleRate);
+      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const output = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) output[i] = Math.random() * 2 - 1;
+      return buffer;
+    }
+
+    function createBrownNoiseBuffer(audioCtx, seconds) {
+      const bufferSize = Math.floor(seconds * audioCtx.sampleRate);
+      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const output = buffer.getChannelData(0);
+      let lastOut = 0;
+      for (let i = 0; i < bufferSize; i++) {
+        const brown = Math.random() * 2 - 1;
+        output[i] = (lastOut + (0.02 * brown)) / 1.02;
+        lastOut = output[i];
+        output[i] *= 3.5;
+      }
+      return buffer;
+    }
+
+    function createLoopingSource(audioCtx, buffer) {
+      const source = audioCtx.createBufferSource();
+      source.buffer = buffer;
+      source.loop = true;
+      return source;
+    }
+
+    function createConstantSource(audioCtx, value) {
+      const source = audioCtx.createConstantSource();
+      source.offset.value = value;
+      return source;
+    }
+
+    function createControlLowpass(audioCtx, cutoffHz) {
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = cutoffHz;
+      filter.Q.value = 0.0001;
+      return filter;
+    }
+
+    function createThresholdCurve(threshold, power, sampleCount) {
+      const curve = new Float32Array(sampleCount);
+      for (let i = 0; i < sampleCount; i++) {
+        const x = i / (sampleCount - 1);
+        curve[i] = x <= threshold ? 0 : Math.pow((x - threshold) / (1 - threshold), power);
+      }
+      return curve;
+    }
+
+    let brookAudioCtx = null;
+    let brookBrownNoiseBuffer = null;
+    let brookStartedSources = [];
+    let brookMasterGain = null;
+    let brookCompressor = null;
+    let brookMakeupGain = null;
+    let brookLayers = [];
+    let brookBubbleLayer = null;
+    let brookGurgleLayer = null;
+
+    function createBrookStream(audioCtx, opts) {
+      const audioSource = createLoopingSource(audioCtx, brookBrownNoiseBuffer);
+      const audioLPF = audioCtx.createBiquadFilter();
+      audioLPF.type = 'lowpass';
+      audioLPF.frequency.value = opts.audioLowpassHz;
+      audioLPF.Q.value = 0.0001;
+
+      const rhpf = audioCtx.createBiquadFilter();
+      rhpf.type = 'highpass';
+      rhpf.frequency.value = opts.frequencyOffset;
+      rhpf.Q.value = opts.rhpfQ;
+
+      const gain = audioCtx.createGain();
+      gain.gain.value = opts.outputGain;
+      const panner = new StereoPannerNode(audioCtx, { pan: opts.pan });
+
+      const controlSource = createLoopingSource(audioCtx, brookBrownNoiseBuffer);
+      const controlLPF = createControlLowpass(audioCtx, opts.controlLowpassHz);
+      const controlDepth = audioCtx.createGain();
+      controlDepth.gain.value = opts.frequencyScale;
+      const controlOffset = createConstantSource(audioCtx, opts.frequencyOffset);
+
+      audioSource.connect(audioLPF);
+      audioLPF.connect(rhpf);
+      rhpf.connect(gain);
+      gain.connect(panner);
+
+      controlSource.connect(controlLPF);
+      controlLPF.connect(controlDepth);
+      controlDepth.connect(rhpf.frequency);
+      controlOffset.connect(rhpf.frequency);
+
+      brookStartedSources.push(audioSource, controlSource, controlOffset);
+      return { rhpf, gain, panner, controlDepth, isBright: opts.isBright };
+    }
+
+    function createBubbleLayer(audioCtx, masterTarget) {
+      const whiteBuffer = createWhiteNoiseBuffer(audioCtx, 4);
+      const bubbleSource = createLoopingSource(audioCtx, whiteBuffer);
+
+      const bubbleBandpass = audioCtx.createBiquadFilter();
+      bubbleBandpass.type = 'bandpass';
+      bubbleBandpass.frequency.value = 1750;
+      bubbleBandpass.Q.value = 7.5;
+
+      const bubbleHighpass = audioCtx.createBiquadFilter();
+      bubbleHighpass.type = 'highpass';
+      bubbleHighpass.frequency.value = 1100;
+      bubbleHighpass.Q.value = 0.0001;
+
+      const bubbleGain = audioCtx.createGain();
+      bubbleGain.gain.value = 0.0;
+
+      const bubblePanner = new StereoPannerNode(audioCtx, { pan: 0.03 });
+
+      const controlSource = createLoopingSource(audioCtx, whiteBuffer);
+      const controlLPF = createControlLowpass(audioCtx, 6.5);
+      const thresholdShaper = audioCtx.createWaveShaper();
+      thresholdShaper.curve = createThresholdCurve(0.60, 3.0, 1024);
+      thresholdShaper.oversample = '4x';
+
+      const burstDepth = audioCtx.createGain();
+      burstDepth.gain.value = 0.040;
+
+      const flutterOsc = audioCtx.createOscillator();
+      flutterOsc.type = 'sine';
+      flutterOsc.frequency.value = 5.8;
+
+      const flutterDepth = audioCtx.createGain();
+      flutterDepth.gain.value = 130;
+
+      bubbleSource.connect(bubbleBandpass);
+      bubbleBandpass.connect(bubbleHighpass);
+      bubbleHighpass.connect(bubbleGain);
+      bubbleGain.connect(bubblePanner);
+      bubblePanner.connect(masterTarget);
+
+      controlSource.connect(controlLPF);
+      controlLPF.connect(thresholdShaper);
+      thresholdShaper.connect(burstDepth);
+      burstDepth.connect(bubbleGain.gain);
+
+      flutterOsc.connect(flutterDepth);
+      flutterDepth.connect(bubbleBandpass.frequency);
+
+      brookStartedSources.push(bubbleSource, controlSource, flutterOsc);
+
+      return { bubbleBandpass, bubbleGain, burstDepth };
+    }
+
+    function createGurgleLayer(audioCtx, masterTarget) {
+      const gurgleSource = createLoopingSource(audioCtx, brookBrownNoiseBuffer);
+
+      const gurgleBandpass = audioCtx.createBiquadFilter();
+      gurgleBandpass.type = 'bandpass';
+      gurgleBandpass.frequency.value = 430;
+      gurgleBandpass.Q.value = 2.2;
+
+      const gurgleLowpass = audioCtx.createBiquadFilter();
+      gurgleLowpass.type = 'lowpass';
+      gurgleLowpass.frequency.value = 900;
+      gurgleLowpass.Q.value = 0.0001;
+
+      const gurgleGain = audioCtx.createGain();
+      gurgleGain.gain.value = 0.0;
+
+      const gurglePanner = new StereoPannerNode(audioCtx, { pan: -0.04 });
+
+      const controlSource = createLoopingSource(audioCtx, brookBrownNoiseBuffer);
+      const controlLPF = createControlLowpass(audioCtx, 5.0);
+      const thresholdShaper = audioCtx.createWaveShaper();
+      thresholdShaper.curve = createThresholdCurve(0.50, 2.0, 1024);
+      thresholdShaper.oversample = '4x';
+
+      const burstDepth = audioCtx.createGain();
+      burstDepth.gain.value = 0.050;
+
+      const wobbleOsc = audioCtx.createOscillator();
+      wobbleOsc.type = 'sine';
+      wobbleOsc.frequency.value = 3.0;
+
+      const wobbleDepth = audioCtx.createGain();
+      wobbleDepth.gain.value = 55;
+
+      gurgleSource.connect(gurgleBandpass);
+      gurgleBandpass.connect(gurgleLowpass);
+      gurgleLowpass.connect(gurgleGain);
+      gurgleGain.connect(gurglePanner);
+      gurglePanner.connect(masterTarget);
+
+      controlSource.connect(controlLPF);
+      controlLPF.connect(thresholdShaper);
+      thresholdShaper.connect(burstDepth);
+      burstDepth.connect(gurgleGain.gain);
+
+      wobbleOsc.connect(wobbleDepth);
+      wobbleDepth.connect(gurgleBandpass.frequency);
+
+      brookStartedSources.push(gurgleSource, controlSource, wobbleOsc);
+
+      return { gurgleBandpass, gurgleGain, burstDepth };
+    }
+
+    function startBrook() {
+      if (brookAudioCtx) return;
+      brookAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      brookBrownNoiseBuffer = createBrownNoiseBuffer(brookAudioCtx, 10);
+      brookStartedSources = [];
+      brookLayers = [];
+
+      brookMasterGain = brookAudioCtx.createGain();
+      brookMasterGain.gain.value = Number(document.getElementById('brookMasterSlider').value);
+
+      brookCompressor = brookAudioCtx.createDynamicsCompressor();
+      brookCompressor.threshold.value = -26;
+      brookCompressor.knee.value = 18;
+      brookCompressor.ratio.value = 3.0;
+      brookCompressor.attack.value = 0.003;
+      brookCompressor.release.value = 0.18;
+
+      brookMakeupGain = brookAudioCtx.createGain();
+      brookMakeupGain.gain.value = 2.7;
+
+      const brightScale = Number(document.getElementById('brookBrightSlider').value);
+      const rhpfQ = Number(document.getElementById('brookRQSlider').value);
+      const layer2Boost = Number(document.getElementById('brookLayer2Slider').value);
+
+      const configs = [
+        { audioLowpassHz: 400, controlLowpassHz: 14, frequencyScale: brightScale,     frequencyOffset: 500,  rhpfQ, outputGain: 0.016, pan: -0.18, isBright: false },
+        { audioLowpassHz: 400, controlLowpassHz: 14, frequencyScale: brightScale*0.9, frequencyOffset: 560,  rhpfQ, outputGain: 0.014, pan: -0.05, isBright: false },
+        { audioLowpassHz: 400, controlLowpassHz: 20, frequencyScale: brightScale*2.0, frequencyOffset: 1000, rhpfQ, outputGain: 0.020 * layer2Boost, pan: 0.08, isBright: true },
+        { audioLowpassHz: 400, controlLowpassHz: 20, frequencyScale: brightScale*2.2, frequencyOffset: 1180, rhpfQ, outputGain: 0.016 * layer2Boost, pan: 0.20, isBright: true }
+      ];
+
+      configs.forEach(function(cfg) {
+        const layer = createBrookStream(brookAudioCtx, cfg);
+        layer.panner.connect(brookMasterGain);
+        brookLayers.push(layer);
+      });
+
+      brookBubbleLayer = createBubbleLayer(brookAudioCtx, brookMasterGain);
+      brookGurgleLayer = createGurgleLayer(brookAudioCtx, brookMasterGain);
+
+      brookMasterGain.connect(brookCompressor);
+      brookCompressor.connect(brookMakeupGain);
+      brookMakeupGain.connect(brookAudioCtx.destination);
+
+      brookStartedSources.forEach(node => node.start());
+      document.getElementById('brookStatusDot').classList.add('live');
+      document.getElementById('brookStatusText').textContent = 'running';
+    }
+
+    function stopBrook() {
+      if (!brookAudioCtx) return;
+      brookStartedSources.forEach(function(node) { try { node.stop(); } catch (e) {} });
+      brookStartedSources = [];
+      brookLayers = [];
+      brookBubbleLayer = null;
+      brookGurgleLayer = null;
+      brookAudioCtx.close();
+      brookAudioCtx = null;
+      brookBrownNoiseBuffer = null;
+      brookMasterGain = null;
+      brookCompressor = null;
+      brookMakeupGain = null;
+      document.getElementById('brookStatusDot').classList.remove('live');
+      document.getElementById('brookStatusText').textContent = 'idle';
+    }
+
+    function updateBrookParameters() {
+      const masterValue = Number(document.getElementById('brookMasterSlider').value).toFixed(2);
+      const layer2Value = Number(document.getElementById('brookLayer2Slider').value).toFixed(2);
+      const brightValue = Number(document.getElementById('brookBrightSlider').value).toFixed(2);
+      const rqValue = Number(document.getElementById('brookRQSlider').value).toFixed(2);
+
+      document.getElementById('brookMasterValue').textContent = masterValue;
+      document.getElementById('brookLayer2Value').textContent = layer2Value;
+      document.getElementById('brookBrightValue').textContent = brightValue;
+      document.getElementById('brookRQValue').textContent = rqValue;
+
+      if (brookMasterGain) brookMasterGain.gain.value = Number(masterValue);
+      if (brookLayers.length) {
+        brookLayers.forEach(function(layer) {
+          layer.rhpf.Q.value = Number(rqValue);
+          if (layer.isBright) {
+            layer.controlDepth.gain.value = Number(brightValue) * 2;
+          } else {
+            layer.controlDepth.gain.value = Number(brightValue);
+          }
+        });
+        if (brookLayers[2]) brookLayers[2].gain.gain.value = 0.020 * Number(layer2Value);
+        if (brookLayers[3]) brookLayers[3].gain.gain.value = 0.016 * Number(layer2Value);
+      }
+
+      if (brookBubbleLayer) {
+        brookBubbleLayer.bubbleBandpass.frequency.value = 1450 + Number(brightValue) * 0.9;
+      }
+
+      if (brookGurgleLayer) {
+        brookGurgleLayer.gurgleBandpass.frequency.value = 320 + Number(brightValue) * 0.16;
+      }
+    }
+
+    let windAudioCtx = null;
+    let windMasterGain = null;
+    let windWhiteNoiseBuffer = null;
+    let windStartedSources = [];
+    let windNodes = {
+      baseLfo: null,
+      staticDepth: null,
+      wireAFilter: null,
+      wireBFilter: null,
+      howlWobbleA: null,
+      howlWobbleB: null,
+      metalGain: null
+    };
+
+    function createWindSpeedControlLayer(audioCtx) {
+      const windControlSum = audioCtx.createGain();
+      windControlSum.gain.value = 1.0;
+      const baseLfo = audioCtx.createOscillator();
+      baseLfo.type = 'sine';
+      baseLfo.frequency.value = Number(document.getElementById('windLfoSlider').value);
+      const baseLfoGain = audioCtx.createGain();
+      baseLfoGain.gain.value = 0.18;
+      const baseOffset = createConstantSource(audioCtx, 0.32);
+      baseLfo.connect(baseLfoGain);
+      baseLfoGain.connect(windControlSum);
+      baseOffset.connect(windControlSum);
+      windStartedSources.push(baseLfo, baseOffset);
+      windNodes.baseLfo = baseLfo;
+
+      const gustNoise = createLoopingSource(audioCtx, windWhiteNoiseBuffer);
+      const gustLowpass = createControlLowpass(audioCtx, 0.5);
+      const gustHighpass = audioCtx.createBiquadFilter();
+      gustHighpass.type = 'highpass';
+      gustHighpass.frequency.value = 0.02;
+      gustHighpass.Q.value = 0.0001;
+      const gustDepth = audioCtx.createGain();
+      gustDepth.gain.value = 0.18;
+      gustNoise.connect(gustLowpass);
+      gustLowpass.connect(gustHighpass);
+      gustHighpass.connect(gustDepth);
+      gustDepth.connect(windControlSum);
+      windStartedSources.push(gustNoise);
+
+      const squallNoise = createLoopingSource(audioCtx, windWhiteNoiseBuffer);
+      const squallLowpass = createControlLowpass(audioCtx, 3.0);
+      const squallHighpass = audioCtx.createBiquadFilter();
+      squallHighpass.type = 'highpass';
+      squallHighpass.frequency.value = 0.2;
+      squallHighpass.Q.value = 0.0001;
+      const squallDepth = audioCtx.createGain();
+      squallDepth.gain.value = 0.07;
+      squallNoise.connect(squallLowpass);
+      squallLowpass.connect(squallHighpass);
+      squallHighpass.connect(squallDepth);
+      squallDepth.connect(windControlSum);
+      windStartedSources.push(squallNoise);
+
+      const finalLag = createControlLowpass(audioCtx, 8.0);
+      windControlSum.connect(finalLag);
+      return finalLag;
+    }
+
+    function createStaticNoiseLayer(audioCtx, windSpeedControl) {
+      const staticNoise = createLoopingSource(audioCtx, windWhiteNoiseBuffer);
+      const staticBandpass = audioCtx.createBiquadFilter();
+      staticBandpass.type = 'bandpass';
+      staticBandpass.frequency.value = 800;
+      staticBandpass.Q.value = 1.0;
+      const staticGain = audioCtx.createGain();
+      staticGain.gain.value = 0.0;
+      const staticFloor = createConstantSource(audioCtx, 0.03);
+      const staticDepth = audioCtx.createGain();
+      staticDepth.gain.value = Number(document.getElementById('windStaticSlider').value);
+      const staticPanner = new StereoPannerNode(audioCtx, { pan: 0.0 });
+      staticNoise.connect(staticBandpass);
+      staticBandpass.connect(staticGain);
+      staticGain.connect(staticPanner);
+      staticFloor.connect(staticGain.gain);
+      windSpeedControl.connect(staticDepth);
+      staticDepth.connect(staticGain.gain);
+      windStartedSources.push(staticNoise, staticFloor);
+      windNodes.staticDepth = staticDepth;
+      return staticPanner;
+    }
+
+    function createSweptNoiseLayer(audioCtx, windSpeedControl) {
+      const sweptNoise = createLoopingSource(audioCtx, windWhiteNoiseBuffer);
+      const sweptBandpass = audioCtx.createBiquadFilter();
+      sweptBandpass.type = 'bandpass';
+      sweptBandpass.frequency.value = 1200;
+      sweptBandpass.Q.value = 0.8;
+      const sweptGain = audioCtx.createGain();
+      sweptGain.gain.value = 0.0;
+      const sweptPanner = new StereoPannerNode(audioCtx, { pan: 0.0 });
+      const sweptBase = createConstantSource(audioCtx, 1200);
+      const sweptDepth = audioCtx.createGain();
+      sweptDepth.gain.value = 2200;
+      const sweptFloor = createConstantSource(audioCtx, 0.005);
+      const sweptAmpDepth = audioCtx.createGain();
+      sweptAmpDepth.gain.value = 0.06;
+      const sweptFlutterLfo = audioCtx.createOscillator();
+      sweptFlutterLfo.type = 'sine';
+      sweptFlutterLfo.frequency.value = 2.5;
+      const sweptFlutterDepth = audioCtx.createGain();
+      sweptFlutterDepth.gain.value = 120;
+      sweptNoise.connect(sweptBandpass);
+      sweptBandpass.connect(sweptGain);
+      sweptGain.connect(sweptPanner);
+      sweptBase.connect(sweptBandpass.frequency);
+      windSpeedControl.connect(sweptDepth);
+      sweptDepth.connect(sweptBandpass.frequency);
+      sweptFlutterLfo.connect(sweptFlutterDepth);
+      sweptFlutterDepth.connect(sweptBandpass.frequency);
+      sweptFloor.connect(sweptGain.gain);
+      windSpeedControl.connect(sweptAmpDepth);
+      sweptAmpDepth.connect(sweptGain.gain);
+      windStartedSources.push(sweptNoise, sweptBase, sweptFloor, sweptFlutterLfo);
+      return sweptPanner;
+    }
+
+    function createWhistlingWireLayer(audioCtx, windSpeedControl, baseFrequency, frequencyRange, threshold, amplitudeScale, panPosition) {
+      const wireNoise = createLoopingSource(audioCtx, windWhiteNoiseBuffer);
+      const wireBandpass = audioCtx.createBiquadFilter();
+      wireBandpass.type = 'bandpass';
+      wireBandpass.frequency.value = baseFrequency;
+      wireBandpass.Q.value = Number(document.getElementById('windWhistleQSlider').value);
+      const wireGain = audioCtx.createGain();
+      wireGain.gain.value = 0.0;
+      const wirePanner = new StereoPannerNode(audioCtx, { pan: panPosition });
+      const wireBase = createConstantSource(audioCtx, baseFrequency);
+      const wireDepth = audioCtx.createGain();
+      wireDepth.gain.value = frequencyRange;
+      const thresholdShaper = audioCtx.createWaveShaper();
+      thresholdShaper.curve = createThresholdCurve(threshold, 2.0, 1024);
+      thresholdShaper.oversample = '4x';
+      const amplitudeScaler = audioCtx.createGain();
+      amplitudeScaler.gain.value = amplitudeScale;
+      wireNoise.connect(wireBandpass);
+      wireBandpass.connect(wireGain);
+      wireGain.connect(wirePanner);
+      wireBase.connect(wireBandpass.frequency);
+      windSpeedControl.connect(wireDepth);
+      wireDepth.connect(wireBandpass.frequency);
+      windSpeedControl.connect(thresholdShaper);
+      thresholdShaper.connect(amplitudeScaler);
+      amplitudeScaler.connect(wireGain.gain);
+      windStartedSources.push(wireNoise, wireBase);
+      return { panner: wirePanner, filter: wireBandpass };
+    }
+
+    function createHowlLayer(audioCtx, windSpeedControl, centerFrequency, qValue, threshold, amplitudeScale, panPosition, wobbleHz) {
+      const howlNoise = createLoopingSource(audioCtx, windWhiteNoiseBuffer);
+      const howlBandpass = audioCtx.createBiquadFilter();
+      howlBandpass.type = 'bandpass';
+      howlBandpass.frequency.value = centerFrequency;
+      howlBandpass.Q.value = qValue;
+      const howlGain = audioCtx.createGain();
+      howlGain.gain.value = 0.0;
+      const howlPanner = new StereoPannerNode(audioCtx, { pan: panPosition });
+      const thresholdShaper = audioCtx.createWaveShaper();
+      thresholdShaper.curve = createThresholdCurve(threshold, 2.5, 1024);
+      thresholdShaper.oversample = '4x';
+      const thresholdScale = audioCtx.createGain();
+      thresholdScale.gain.value = amplitudeScale;
+      const wobbleOsc = audioCtx.createOscillator();
+      wobbleOsc.type = 'sine';
+      wobbleOsc.frequency.value = wobbleHz;
+      const wobbleDepth = audioCtx.createGain();
+      wobbleDepth.gain.value = centerFrequency * 0.08;
+      const amplitudeWobbleOsc = audioCtx.createOscillator();
+      amplitudeWobbleOsc.type = 'sine';
+      amplitudeWobbleOsc.frequency.value = wobbleHz * 0.5;
+      const amplitudeWobbleDepth = audioCtx.createGain();
+      amplitudeWobbleDepth.gain.value = amplitudeScale * 0.2;
+      howlNoise.connect(howlBandpass);
+      howlBandpass.connect(howlGain);
+      howlGain.connect(howlPanner);
+      windSpeedControl.connect(thresholdShaper);
+      thresholdShaper.connect(thresholdScale);
+      thresholdScale.connect(howlGain.gain);
+      wobbleOsc.connect(wobbleDepth);
+      wobbleDepth.connect(howlBandpass.frequency);
+      amplitudeWobbleOsc.connect(amplitudeWobbleDepth);
+      amplitudeWobbleDepth.connect(howlGain.gain);
+      windStartedSources.push(howlNoise, wobbleOsc, amplitudeWobbleOsc);
+      return { panner: howlPanner, wobbleOsc };
+    }
+
+    function createMetalRattleLayer(audioCtx, windSpeedControl) {
+      const metalNoise = createLoopingSource(audioCtx, windWhiteNoiseBuffer);
+      const highpass = audioCtx.createBiquadFilter();
+      highpass.type = 'highpass';
+      highpass.frequency.value = 1200;
+      const band1 = audioCtx.createBiquadFilter();
+      band1.type = 'bandpass';
+      band1.frequency.value = 1800;
+      band1.Q.value = 10;
+      const band2 = audioCtx.createBiquadFilter();
+      band2.type = 'bandpass';
+      band2.frequency.value = 2600;
+      band2.Q.value = 14;
+      const burstShaper = audioCtx.createWaveShaper();
+      burstShaper.curve = createThresholdCurve(0.68, 4.5, 1024);
+      burstShaper.oversample = '4x';
+      const sumGain = audioCtx.createGain();
+      const metalGain = audioCtx.createGain();
+      metalGain.gain.value = Number(document.getElementById('windMetalSlider').value);
+      const panner = new StereoPannerNode(audioCtx, { pan: -0.25 });
+      metalNoise.connect(highpass);
+      highpass.connect(band1);
+      highpass.connect(band2);
+      band1.connect(sumGain);
+      band2.connect(sumGain);
+      sumGain.connect(metalGain);
+      metalGain.connect(panner);
+      windSpeedControl.connect(burstShaper);
+      burstShaper.connect(metalGain.gain);
+      windStartedSources.push(metalNoise);
+      windNodes.metalGain = metalGain;
+      return panner;
+    }
+
+    function startWindScene() {
+      if (windAudioCtx) return;
+      windAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      windWhiteNoiseBuffer = createWhiteNoiseBuffer(windAudioCtx, 10);
+      windMasterGain = windAudioCtx.createGain();
+      windMasterGain.gain.value = Number(document.getElementById('windMasterSlider').value);
+      const windControl = createWindSpeedControlLayer(windAudioCtx);
+      const staticLayer = createStaticNoiseLayer(windAudioCtx, windControl);
+      const sweptLayer = createSweptNoiseLayer(windAudioCtx, windControl);
+      const wireA = createWhistlingWireLayer(windAudioCtx, windControl, 600, 400, 0.35, 0.07, -0.35);
+      const wireB = createWhistlingWireLayer(windAudioCtx, windControl, 1000, 1000, 0.50, 0.05, 0.45);
+      const howlA = createHowlLayer(windAudioCtx, windControl, 220, 12.0, 0.45, 0.045, -0.15, Number(document.getElementById('windHowlWobbleSlider').value));
+      const howlB = createHowlLayer(windAudioCtx, windControl, 320, 10.0, 0.55, 0.035, 0.20, Number(document.getElementById('windHowlWobbleSlider').value) * 0.63);
+      const metalLayer = createMetalRattleLayer(windAudioCtx, windControl);
+      staticLayer.connect(windMasterGain);
+      sweptLayer.connect(windMasterGain);
+      wireA.panner.connect(windMasterGain);
+      wireB.panner.connect(windMasterGain);
+      howlA.panner.connect(windMasterGain);
+      howlB.panner.connect(windMasterGain);
+      metalLayer.connect(windMasterGain);
+      windMasterGain.connect(windAudioCtx.destination);
+      windNodes.wireAFilter = wireA.filter;
+      windNodes.wireBFilter = wireB.filter;
+      windNodes.howlWobbleA = howlA.wobbleOsc;
+      windNodes.howlWobbleB = howlB.wobbleOsc;
+      windStartedSources.forEach(node => node.start());
+      document.getElementById('windStatusDot').classList.add('live');
+      document.getElementById('windStatusText').textContent = 'running';
+    }
+
+    function stopWindScene() {
+      if (!windAudioCtx) return;
+      windStartedSources.forEach(function(node) { try { node.stop(); } catch (e) {} });
+      windStartedSources = [];
+      windAudioCtx.close();
+      windAudioCtx = null;
+      windMasterGain = null;
+      windWhiteNoiseBuffer = null;
+      windNodes = { baseLfo: null, staticDepth: null, wireAFilter: null, wireBFilter: null, howlWobbleA: null, howlWobbleB: null, metalGain: null };
+      document.getElementById('windStatusDot').classList.remove('live');
+      document.getElementById('windStatusText').textContent = 'idle';
+    }
+
+    function updateWindParameters() {
+      const masterValue = Number(document.getElementById('windMasterSlider').value).toFixed(2);
+      const lfoValue = Number(document.getElementById('windLfoSlider').value).toFixed(2);
+      const staticValue = Number(document.getElementById('windStaticSlider').value).toFixed(2);
+      const whistleQValue = Number(document.getElementById('windWhistleQSlider').value).toFixed(2);
+      const howlWobbleValue = Number(document.getElementById('windHowlWobbleSlider').value).toFixed(2);
+      const metalValue = Number(document.getElementById('windMetalSlider').value).toFixed(2);
+      document.getElementById('windMasterValue').textContent = masterValue;
+      document.getElementById('windLfoValue').textContent = lfoValue;
+      document.getElementById('windStaticValue').textContent = staticValue;
+      document.getElementById('windWhistleQValue').textContent = whistleQValue;
+      document.getElementById('windHowlWobbleValue').textContent = howlWobbleValue;
+      document.getElementById('windMetalValue').textContent = metalValue;
+      if (windMasterGain) windMasterGain.gain.value = Number(masterValue);
+      if (windNodes.baseLfo) windNodes.baseLfo.frequency.value = Number(lfoValue);
+      if (windNodes.staticDepth) windNodes.staticDepth.gain.value = Number(staticValue);
+      if (windNodes.wireAFilter) windNodes.wireAFilter.Q.value = Number(whistleQValue);
+      if (windNodes.wireBFilter) windNodes.wireBFilter.Q.value = Number(whistleQValue);
+      if (windNodes.howlWobbleA) windNodes.howlWobbleA.frequency.value = Number(howlWobbleValue);
+      if (windNodes.howlWobbleB) windNodes.howlWobbleB.frequency.value = Number(howlWobbleValue) * 0.63;
+      if (windNodes.metalGain) windNodes.metalGain.gain.value = Number(metalValue);
+    }
+
+    const part1CodeText = `function createBrookStream(audioCtx, opts) {
+  const audioSource = createLoopingSource(audioCtx, brookBrownNoiseBuffer);
+  const audioLPF = audioCtx.createBiquadFilter();
+  audioLPF.type = "lowpass";
+  audioLPF.frequency.value = opts.audioLowpassHz;
+
+  const rhpf = audioCtx.createBiquadFilter();
+  rhpf.type = "highpass";
+  rhpf.frequency.value = opts.frequencyOffset;
+  rhpf.Q.value = opts.rhpfQ;
+
+  const controlSource = createLoopingSource(audioCtx, brookBrownNoiseBuffer);
+  const controlLPF = createControlLowpass(audioCtx, opts.controlLowpassHz);
+  const controlDepth = audioCtx.createGain();
+  controlDepth.gain.value = opts.frequencyScale;
+  const controlOffset = createConstantSource(audioCtx, opts.frequencyOffset);
+
+  audioSource.connect(audioLPF);
+  audioLPF.connect(rhpf);
+  controlSource.connect(controlLPF);
+  controlLPF.connect(controlDepth);
+  controlDepth.connect(rhpf.frequency);
+  controlOffset.connect(rhpf.frequency);
+}`;
+
+    const part2CodeText = `function createMetalRattleLayer(audioCtx, windSpeedControl) {
+  const metalNoise = createLoopingSource(audioCtx, windWhiteNoiseBuffer);
+  const highpass = audioCtx.createBiquadFilter();
+  highpass.type = "highpass";
+  highpass.frequency.value = 1200;
+
+  const band1 = audioCtx.createBiquadFilter();
+  band1.type = "bandpass";
+  band1.frequency.value = 1800;
+  band1.Q.value = 10;
+
+  const band2 = audioCtx.createBiquadFilter();
+  band2.type = "bandpass";
+  band2.frequency.value = 2600;
+  band2.Q.value = 14;
+
+  const burstShaper = audioCtx.createWaveShaper();
+  burstShaper.curve = createThresholdCurve(0.68, 4.5, 1024);
+
+  const sumGain = audioCtx.createGain();
+  const metalGain = audioCtx.createGain();
+  metalNoise.connect(highpass);
+  highpass.connect(band1);
+  highpass.connect(band2);
+  band1.connect(sumGain);
+  band2.connect(sumGain);
+  sumGain.connect(metalGain);
+  windSpeedControl.connect(burstShaper);
+  burstShaper.connect(metalGain.gain);
+}`;
+
+    document.getElementById('part1CodeBlock').textContent = part1CodeText;
+    document.getElementById('part2CodeBlock').textContent = part2CodeText;
+    updateBrookParameters();
+    updateWindParameters();
+  </script>
+</body>
+</html>
